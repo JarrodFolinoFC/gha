@@ -1,3 +1,4 @@
 {
-  "token": "YOUR"
+  "uat": { "token": "uat1", "token2": "uat2", "token3": "uat3" },
+  "staging": { "token": "staging1", "token2": "staging2", "token3": "staging3" }
 }

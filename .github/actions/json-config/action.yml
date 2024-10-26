@@ -4,15 +4,27 @@ inputs:
   config-path:
     description: "Config path"
     required: true
+  environment:
+    description: "Environment"
+    required: true
 
 outputs:
   result:
     description: "Result"
-    value: ${{ steps.step1.outputs.result }}
+    value: ${{ steps.process-config.outputs.result }}
 
 runs:
   using: "composite"
   steps:
-    - id: step1
-      run: echo "result=$(jq -c . <  ${{ inputs.config-path }})" >> $GITHUB_OUTPUT
-      shell: bash
+    - id: process-config
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const configPath = '${{ inputs.config-path }}';
+          const config = fs.readFileSync(configPath, 'utf8');
+          const environmentVariablesJson = JSON.parse(config)['${{ inputs.environment }}'];
+
+          for (const [key, value] of Object.entries(environmentVariablesJson)) {
+            core.exportVariable(key, value);
+          }

@@ -9,16 +9,24 @@ jobs:
     steps:
       - name: Check out repository (Job)
         uses: actions/checkout@v4
-      - name: Debug repository (Job)
-        run: pwd && ls -R
-        shell: bash
       - name: Use local json-config
         id: hello
         uses: ./.github/actions/json-config
         with:
           config-path: ./config.json
-      - name: Get the json-config outputs
-        run: echo "${{ steps.hello.outputs.result }}"
+          environment: staging
+      - name: Get the env variables
+        run: env | grep token
+      # - uses: actions/setup-python@v4
+      #   with:
+      #     python-version: '3.x'
+      # - uses: jannekem/run-python-script-action@v1
+      #   with:
+      #     script: |
+      #       import os
+      #       print("Environment variables:")
+      #       for name, value in os.environ.items():
+      #         print("{0}: {1}".format(name, value))
 
   # job2:
   #   runs-on: ubuntu-latest
